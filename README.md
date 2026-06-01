@@ -1,6 +1,12 @@
 # 🤖 Bot de Trading Algorítmico Experimental para Binance Testnet
 
-**Un pipeline educativo de trading automatizado estructurado en etapas ("capas") modulares. Cuenta con evaluación de estrategias basadas en indicadores tradicionales, un motor de votación ponderado, un modelo de Machine Learning (Random Forest) para la toma de decisiones y ejecución de órdenes ficticias en Binance Testnet.**
+Pipeline educativo de trading algorítmico escrito en Python. Estructurado en módulos secuenciales ("capas") que simulan el flujo completo de un bot de trading:
+
+- 📊 **6 estrategias técnicas** (SMA, EMA, RSI, Bollinger, ADX, SuperTrend)
+- 🔮 **Oráculo de decisión** con votación ponderada o clasificador Random Forest (scikit-learn)
+- 📉 **Gestión de riesgo** con Stop-Loss, Take-Profit y grilla DCA
+- 🧪 **Backtesting histórico** con datos reales de Binance
+- 🤖 **Ejecución ficticia** de órdenes en Binance Testnet con seguimiento de P&L en vivo
 
 > ⚠️ **AVISO CRÍTICO DE RIESGO**: Este proyecto es **estrictamente educativo y experimental**. Bajo ninguna circunstancia debe utilizarse para operar en mercados reales con capital real. El sistema carece de las validaciones de robustez, manejo de latencia, redundancia de red, gestión de errores y modelado financiero avanzado necesarios para operar de forma segura en entornos reales de producción.
 
