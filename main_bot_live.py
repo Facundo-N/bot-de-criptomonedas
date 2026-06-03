@@ -20,6 +20,8 @@ from estrategias.estrategia_rsi import evaluar as eval_rsi
 from estrategias.estrategia_bollinger import evaluar as eval_bollinger
 from estrategias.estrategia_adx import evaluar as eval_adx
 from estrategias.estrategia_supertrend import evaluar as eval_supertrend
+from bot_state import estado
+from dashboard_server import iniciar_servidor
 
 API_KEY_FILE = "api key.txt"
 TESTNET_BASE_URL = "https://testnet.binance.vision"
@@ -120,6 +122,10 @@ def main():
     print("  Ctrl+C para resumen final")
     print("\n  🔄 Cargando ML..."); recargar_modelo()
 
+    # ── Iniciar dashboard ─────────────────────────────────────
+    iniciar_servidor(puerto=9090)
+    estado.saldo_inicial = real
+
     agentes=crear_agentes(capital_por_agente=capa); ciclo=0
 
     try:
@@ -138,6 +144,16 @@ def main():
                 votos_todos=filtrar_votos(df,None)
                 sep()
                 print(f"  #{ciclo} | BTC:{precio:.0f} | RSI:{_ultimo_rsi:.0f} | {reg['regimen']} ADX:{reg['adx']}")
+                # ── Publicar al dashboard ──────────────────────
+                saldo_act = saldo_real_usdt(cli)
+                estado.actualizar_mercado(
+                    precio=precio, regimen=reg['regimen'],
+                    adx=reg['adx'], vol_z=reg['volatilidad_zscore'],
+                    rsi=_ultimo_rsi, saldo_inicial=estado.saldo_inicial,
+                    saldo_actual=saldo_act, ciclo=ciclo
+                )
+                estado.actualizar_votos(votos_todos)
+                estado.actualizar_agentes(agentes)
 
             for ag in agentes:
                 flot_ant=ag.ultimo_flotante
@@ -153,6 +169,10 @@ def main():
                             c="🟢" if r["pnl"]>=0 else "🔴"
                             lbl="GANADO" if r["pnl"]>=0 else "PERDIDO"
                             print(f"  {ag.emoji} {ag.nombre}: {c} {lbl} {r['pnl']:+.2f}USDT ({r['pct']:+.2f}%) | {razon_salida}")
+                            # Registrar trade en dashboard
+                            if ag.trades:
+                                estado.registrar_trade(ag.nombre, ag.emoji, ag.trades[0])
+                            estado.actualizar_agentes(agentes)
 
                 if es_analisis and ag.btc<=0:
                     f=filtrar_votos(df,ag.categorias_requeridas)
@@ -165,6 +185,7 @@ def main():
                         if r:
                             print(f"  {ag.emoji} {ag.nombre}: 🟢 COMPRADO {r['qty']:.6f} @{r['precio']:.0f} TP:{r['tp']:.0f} SL:{r['sl']:.0f}")
                             ag.analisis_sin_operar = 0
+                            estado.actualizar_agentes(agentes)
                         else:
                             print(f"  {ag.emoji} {ag.nombre}: ⛔ Sin saldo")
                             ag.analisis_sin_operar += 1
@@ -188,6 +209,7 @@ def main():
 
     except KeyboardInterrupt:
         tp=sum(a.pnl_total for a in agentes)
+        estado.marcar_inactivo()
         banner("📊  RESUMEN FINAL")
         for ag in agentes:
             g=len([t for t in ag.trades if t["pnl"]>0]); p=len([t for t in ag.trades if t["pnl"]<=0])

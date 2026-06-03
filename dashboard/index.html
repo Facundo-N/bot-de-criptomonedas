@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bot Cripto — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ── HEADER ─────────────────────────────────────────────── -->
+  <header>
+    <div class="header-left">
+      <span class="logo">🤖 CryptoBot</span>
+      <span class="subtitulo">Binance Testnet — BTCUSDT</span>
+    </div>
+    <div class="header-center">
+      <span id="precio-header" class="precio-grande">—</span>
+      <span id="precio-cambio" class="precio-cambio neutral">—</span>
+    </div>
+    <div class="header-right">
+      <div id="status-dot" class="status-dot offline"></div>
+      <span id="status-texto">Esperando bot...</span>
+      <span id="ultimo-update" class="update-time">—</span>
+    </div>
+  </header>
+
+<!-- ── SCROLL WRAPPER ────────────────────────────────────────── -->
+<div class="main-scroll">
+
+  <!-- ── FILA 1: KPIs ───────────────────────────────────────── -->
+  <section class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Saldo Total</div>
+      <div class="kpi-value" id="saldo-actual">—</div>
+      <div class="kpi-sub" id="saldo-inicial">Base: —</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">P&amp;L Global</div>
+      <div class="kpi-value" id="pnl-global">—</div>
+      <div class="kpi-sub" id="pnl-pct">—</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Régimen</div>
+      <div class="kpi-value" id="regimen">—</div>
+      <div class="kpi-sub" id="adx-val">ADX: —</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">RSI</div>
+      <div class="kpi-value" id="rsi-val">—</div>
+      <div class="kpi-sub" id="vol-zscore">Volatilidad Z: —</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Ciclo</div>
+      <div class="kpi-value" id="ciclo-val">—</div>
+      <div class="kpi-sub" id="trades-total">Trades: —</div>
+    </div>
+  </section>
+
+  <!-- ── FILA 2: Agentes ────────────────────────────────────── -->
+  <section class="seccion">
+    <h2>Agentes</h2>
+    <div id="agentes-grid" class="agentes-grid">
+      <!-- Se genera dinámicamente -->
+    </div>
+  </section>
+
+  <!-- ── FILA 3: Votos + P&L Chart ──────────────────────────── -->
+  <section class="fila-doble">
+    <div class="seccion panel-votos">
+      <h2>Votos de Estrategias</h2>
+      <div id="votos-lista" class="votos-lista">
+        <p class="placeholder">Esperando análisis...</p>
+      </div>
+    </div>
+
+    <div class="seccion panel-chart">
+      <h2>P&amp;L Acumulado</h2>
+      <canvas id="chart-pnl"></canvas>
+    </div>
+  </section>
+
+  <!-- ── FILA 4: Precio mini-chart ──────────────────────────── -->
+  <section class="seccion">
+    <h2>Historial de Precio BTC</h2>
+    <canvas id="chart-precio" style="max-height:100px"></canvas>
+  </section>
+
+  <!-- ── FILA 5: Trades ─────────────────────────────────────── -->
+  <section class="seccion">
+    <h2>Historial de Trades</h2>
+    <div class="tabla-wrapper">
+      <table class="tabla-trades">
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Agente</th>
+            <th>Compra</th>
+            <th>Venta</th>
+            <th>P&amp;L (USDT)</th>
+            <th>%</th>
+            <th>Razón</th>
+          </tr>
+        </thead>
+        <tbody id="trades-body">
+          <tr><td colspan="7" class="placeholder">Sin trades aún...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── FILA 6: Log ────────────────────────────────────────── -->
+  <section class="seccion seccion-log">
+    <h2>Log de Eventos</h2>
+    <div id="log-container" class="log-container"></div>
+  </section>
+
+  <script src="app.js"></script>
+</div><!-- /main-scroll -->
+</body>
+</html>
